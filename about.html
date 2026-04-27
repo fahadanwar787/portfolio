@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fahad Anwar — About</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #07070f;
+      color: #fff;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      cursor: none;
+    }
+
+    #canvas {
+      position: fixed; inset: 0;
+      width: 100%; height: 100%;
+      z-index: 0; pointer-events: none;
+    }
+
+    /* ── Nav ── */
+    .topnav {
+      position: fixed;
+      top: 1.1rem; left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex; align-items: center; gap: 2px;
+      background: rgba(255,255,255,.055);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 999px;
+      padding: 4px;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .nav-link {
+      padding: .42rem 1.1rem;
+      border-radius: 999px;
+      font-size: .84rem; font-weight: 500;
+      color: rgba(255,255,255,.62);
+      text-decoration: none;
+      letter-spacing: .01em;
+      transition: color .18s, background .18s;
+      white-space: nowrap;
+    }
+    .nav-link:hover { color: rgba(255,255,255,.92); }
+    .nav-link.active { background: rgba(255,255,255,.14); color: #fff; }
+
+    /* ── Scrollable page area ── */
+    .page {
+      position: fixed;
+      top: 60px; left: 0; right: 0; bottom: 0;
+      z-index: 10;
+      overflow-y: auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+    .page::-webkit-scrollbar { width: 4px; }
+    .page::-webkit-scrollbar-track { background: transparent; }
+    .page::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,.12);
+      border-radius: 999px;
+    }
+
+    /* ── About layout ── */
+    .about-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      margin-bottom: 2.8rem;
+    }
+    .page-title {
+      font-size: 2.2rem; font-weight: 700;
+      margin-bottom: .5rem;
+    }
+    .page-sub {
+      font-size: .92rem;
+      color: rgba(255,255,255,.48);
+    }
+
+    /* Divider */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(255,255,255,.07);
+      margin: 2rem 0;
+    }
+
+    /* Sections */
+    .about-section { margin-bottom: 2.2rem; }
+    .section-label {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.35);
+      margin-bottom: .85rem;
+    }
+    .section-body {
+      font-size: .9rem;
+      color: rgba(255,255,255,.6);
+      line-height: 1.72;
+    }
+
+    /* Education entry */
+    .edu-entry {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: .5rem;
+    }
+    .edu-name { font-size: .9rem; font-weight: 500; color: rgba(255,255,255,.85); }
+    .edu-degree { font-size: .83rem; color: rgba(255,255,255,.5); }
+    .edu-year { font-size: .8rem; color: rgba(255,255,255,.35); white-space: nowrap; }
+
+    /* Tag cloud */
+    .tag-cloud { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .tag {
+      font-size: .77rem;
+      padding: .22rem .6rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      color: rgba(255,255,255,.58);
+    }
+
+    /* Cursor dot */
+    #dot {
+      position: fixed; width: 5px; height: 5px;
+      border-radius: 50%;
+      background: rgba(220,225,240,.95);
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+    }
+  </style>
+</head>
+<body data-page="about">
+
+  <canvas id="canvas"></canvas>
+
+  <nav class="topnav">
+    <a href="index.html" class="nav-link" data-page="home">Home</a>
+    <a href="work.html"  class="nav-link" data-page="work">Work</a>
+    <a href="about.html" class="nav-link" data-page="about">About</a>
+  </nav>
+
+  <div class="page">
+    <div class="about-wrap">
+
+      <div class="page-header">
+        <h1 class="page-title">About Me</h1>
+        <p class="page-sub">A little background on who I am.</p>
+      </div>
+
+      <div class="about-section">
+        <p class="section-label">Background</p>
+        <p class="section-body">
+          Hey, I'm Fahad — a student who enjoys building things and figuring out how they work.
+          I'm drawn to software because it sits at the intersection of problem-solving and creativity.
+          Whether it's a web app, a mobile build, or something I haven't tried yet, I like
+          shipping things that actually do something useful.
+          <br><br>
+          Replace this with your own words whenever you're ready. Tell people what drives you,
+          what you've worked on, and where you're headed.
+        </p>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="about-section">
+        <p class="section-label">Education</p>
+        <div class="edu-entry">
+          <div>
+            <div class="edu-name">Your University Name</div>
+            <div class="edu-degree">B.S. Your Major &amp; Minor</div>
+          </div>
+          <div class="edu-year">Expected 20XX</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="about-section">
+        <p class="section-label">Technologies</p>
+        <div class="tag-cloud">
+          <span class="tag">JavaScript</span>
+          <span class="tag">TypeScript</span>
+          <span class="tag">Python</span>
+          <span class="tag">React</span>
+          <span class="tag">Node.js</span>
+          <span class="tag">Flutter</span>
+          <span class="tag">SQL</span>
+          <span class="tag">Git</span>
+          <span class="tag">Docker</span>
+          <span class="tag">Add more...</span>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="about-section">
+        <p class="section-label">Interests</p>
+        <div class="tag-cloud">
+          <span class="tag">Software Engineering</span>
+          <span class="tag">Mobile Development</span>
+          <span class="tag">Open Source</span>
+          <span class="tag">Add yours...</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="dot"></div>
+
+  <script>
+    /* ── Nav active state ── */
+    const page = document.body.dataset.page;
+    document.querySelectorAll('.nav-link').forEach(l => {
+      if (l.dataset.page === page) l.classList.add('active');
+    });
+
+    /* ── Canvas ── */
+    const canvas = document.getElementById('canvas');
+    const ctx    = canvas.getContext('2d');
+    function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+
+    /* ── Stars ── */
+    const stars = Array.from({ length: 190 }, () => ({
+      x:          Math.random() * innerWidth,
+      y:          Math.random() * innerHeight,
+      r:          Math.random() * 2.0 + 0.7,
+      baseOp:     Math.random() * 0.32 + 0.1,
+      phase:      Math.random() * Math.PI * 2,
+      phaseSpeed: Math.random() * 0.0025 + 0.0008,
+      amp:        Math.random() * 0.1  + 0.03,
+      dx:         (Math.random() - 0.5) * 0.09,
+      dy:         (Math.random() - 0.5) * 0.09,
+    }));
+
+    /* ── Cursor chain ── */
+    const LINKS = 26;
+    const LERP  = 0.085;
+    let rawX = innerWidth / 2, rawY = innerHeight / 2;
+    const chain = Array.from({ length: LINKS }, () => ({ x: rawX, y: rawY }));
+    const dot   = document.getElementById('dot');
+
+    document.addEventListener('mousemove', e => {
+      rawX = e.clientX; rawY = e.clientY;
+      dot.style.left = rawX + 'px';
+      dot.style.top  = rawY + 'px';
+    });
+
+    /* ── Render loop ── */
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const W = canvas.width, H = canvas.height;
+
+      stars.forEach(s => {
+        s.phase += s.phaseSpeed;
+        const op = Math.max(0, Math.min(1, s.baseOp + Math.sin(s.phase) * s.amp));
+        s.x = (s.x + s.dx + W) % W;
+        s.y = (s.y + s.dy + H) % H;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(210,215,232,${op})`;
+        ctx.fill();
+      });
+
+      chain[0].x += (rawX - chain[0].x) * LERP;
+      chain[0].y += (rawY - chain[0].y) * LERP;
+      for (let i = 1; i < LINKS; i++) {
+        chain[i].x += (chain[i-1].x - chain[i].x) * LERP;
+        chain[i].y += (chain[i-1].y - chain[i].y) * LERP;
+      }
+
+      for (let i = 0; i < LINKS; i++) {
+        const t     = i / (LINKS - 1);
+        const size  = (1 - t) * 6.5 + 0.5;
+        const alpha = (1 - t) * 0.52 + 0.02;
+        ctx.beginPath();
+        ctx.arc(chain[i].x, chain[i].y, size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(218,222,240,${alpha})`;
+        ctx.fill();
+      }
+
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
+</body>
+</html>
