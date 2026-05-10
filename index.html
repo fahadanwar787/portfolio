@@ -228,9 +228,11 @@
     const LERP  = 0.085;
     let rawX = innerWidth / 2, rawY = innerHeight / 2;
     const chain = Array.from({ length: LINKS }, () => ({ x: rawX, y: rawY }));
+    let hasMoved = false;
 
     document.addEventListener('mousemove', e => {
       rawX = e.clientX; rawY = e.clientY;
+      hasMoved = true;
     });
 
     /* ── Render loop ── */
@@ -250,23 +252,25 @@
         ctx.fill();
       });
 
-      /* Chain: each link lerps toward the one in front of it */
-      chain[0].x += (rawX - chain[0].x) * LERP;
-      chain[0].y += (rawY - chain[0].y) * LERP;
-      for (let i = 1; i < LINKS; i++) {
-        chain[i].x += (chain[i-1].x - chain[i].x) * LERP;
-        chain[i].y += (chain[i-1].y - chain[i].y) * LERP;
-      }
+      if (hasMoved) {
+        /* Chain: each link lerps toward the one in front of it */
+        chain[0].x += (rawX - chain[0].x) * LERP;
+        chain[0].y += (rawY - chain[0].y) * LERP;
+        for (let i = 1; i < LINKS; i++) {
+          chain[i].x += (chain[i-1].x - chain[i].x) * LERP;
+          chain[i].y += (chain[i-1].y - chain[i].y) * LERP;
+        }
 
-      /* Draw chain — head (i=0) is biggest/brightest, tail fades out */
-      for (let i = 0; i < LINKS; i++) {
-        const t     = i / (LINKS - 1);
-        const size  = (1 - t) * 6.5 + 0.5;
-        const alpha = (1 - t) * 0.52 + 0.02;
-        ctx.beginPath();
-        ctx.arc(chain[i].x, chain[i].y, size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(218,222,240,${alpha})`;
-        ctx.fill();
+        /* Draw chain — head (i=0) is biggest/brightest, tail fades out */
+        for (let i = 0; i < LINKS; i++) {
+          const t     = i / (LINKS - 1);
+          const size  = (1 - t) * 6.5 + 0.5;
+          const alpha = (1 - t) * 0.52 + 0.02;
+          ctx.beginPath();
+          ctx.arc(chain[i].x, chain[i].y, size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(218,222,240,${alpha})`;
+          ctx.fill();
+        }
       }
 
       requestAnimationFrame(draw);

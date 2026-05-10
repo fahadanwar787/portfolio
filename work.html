@@ -129,6 +129,12 @@
       line-height: 1.35;
     }
 
+    @media (max-width: 600px) {
+      .page { padding: 2rem 1rem 4rem; }
+      .work-columns { flex-direction: column; }
+      .col-right { margin-top: 0; }
+      .card-img { height: 200px !important; }
+    }
   </style>
 </head>
 <body data-page="work">
@@ -254,9 +260,11 @@
     const LERP  = 0.085;
     let rawX = innerWidth / 2, rawY = innerHeight / 2;
     const chain = Array.from({ length: LINKS }, () => ({ x: rawX, y: rawY }));
+    let hasMoved = false;
 
     document.addEventListener('mousemove', e => {
       rawX = e.clientX; rawY = e.clientY;
+      hasMoved = true;
     });
 
     /* ── Render loop ── */
@@ -275,21 +283,23 @@
         ctx.fill();
       });
 
-      chain[0].x += (rawX - chain[0].x) * LERP;
-      chain[0].y += (rawY - chain[0].y) * LERP;
-      for (let i = 1; i < LINKS; i++) {
-        chain[i].x += (chain[i-1].x - chain[i].x) * LERP;
-        chain[i].y += (chain[i-1].y - chain[i].y) * LERP;
-      }
+      if (hasMoved) {
+        chain[0].x += (rawX - chain[0].x) * LERP;
+        chain[0].y += (rawY - chain[0].y) * LERP;
+        for (let i = 1; i < LINKS; i++) {
+          chain[i].x += (chain[i-1].x - chain[i].x) * LERP;
+          chain[i].y += (chain[i-1].y - chain[i].y) * LERP;
+        }
 
-      for (let i = 0; i < LINKS; i++) {
-        const t     = i / (LINKS - 1);
-        const size  = (1 - t) * 6.5 + 0.5;
-        const alpha = (1 - t) * 0.55 + 0.02;
-        ctx.beginPath();
-        ctx.arc(chain[i].x, chain[i].y, size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(218,222,240,${alpha})`;
-        ctx.fill();
+        for (let i = 0; i < LINKS; i++) {
+          const t     = i / (LINKS - 1);
+          const size  = (1 - t) * 6.5 + 0.5;
+          const alpha = (1 - t) * 0.55 + 0.02;
+          ctx.beginPath();
+          ctx.arc(chain[i].x, chain[i].y, size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(218,222,240,${alpha})`;
+          ctx.fill();
+        }
       }
 
       requestAnimationFrame(draw);
