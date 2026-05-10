@@ -13,7 +13,6 @@
       font-family: 'Segoe UI', system-ui, sans-serif;
       height: 100vh;
       overflow: hidden;
-      cursor: none;
     }
 
     #canvas {
@@ -129,14 +128,6 @@
       color: rgba(255,255,255,.58);
     }
 
-    /* Cursor dot */
-    #dot {
-      position: fixed; width: 5px; height: 5px;
-      border-radius: 50%;
-      background: rgba(220,225,240,.95);
-      pointer-events: none; z-index: 9999;
-      transform: translate(-50%,-50%);
-    }
   </style>
 </head>
 <body data-page="about">
@@ -216,8 +207,6 @@
     </div>
   </div>
 
-  <div id="dot"></div>
-
   <script>
     /* ── Nav active state ── */
     const page = document.body.dataset.page;
@@ -250,12 +239,9 @@
     const LERP  = 0.085;
     let rawX = innerWidth / 2, rawY = innerHeight / 2;
     const chain = Array.from({ length: LINKS }, () => ({ x: rawX, y: rawY }));
-    const dot   = document.getElementById('dot');
 
     document.addEventListener('mousemove', e => {
       rawX = e.clientX; rawY = e.clientY;
-      dot.style.left = rawX + 'px';
-      dot.style.top  = rawY + 'px';
     });
 
     /* ── Render loop ── */
