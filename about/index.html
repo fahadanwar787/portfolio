@@ -55,7 +55,6 @@
       font-family: 'Segoe UI', system-ui, sans-serif;
       height: 100vh;
       overflow: hidden;
-      cursor: none;
       transition: background .3s, color .3s;
     }
 
@@ -103,7 +102,6 @@
       background: var(--nav-bg);
       border: 1px solid var(--nav-border);
       color: var(--fg);
-      cursor: none;
       display: flex; align-items: center; justify-content: center;
       transition: background .2s, border-color .2s, color .3s;
     }
@@ -156,13 +154,6 @@
       transition: background .3s, border-color .3s, color .3s;
     }
 
-    #dot {
-      position: fixed; width: 4px; height: 4px;
-      border-radius: 50%; background: var(--fg);
-      pointer-events: none; z-index: 9999;
-      transform: translate(-50%,-50%); opacity: .5;
-      transition: background .3s;
-    }
   </style>
 </head>
 <body data-page="about">
@@ -254,8 +245,6 @@
     </div>
   </div>
 
-  <div id="dot"></div>
-
   <script>
     const html = document.documentElement;
     document.getElementById('themeToggle').addEventListener('click', () => {
@@ -270,7 +259,12 @@
 
     const canvas = document.getElementById('canvas');
     const ctx    = canvas.getContext('2d');
-    function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+    function resize() {
+      const scaleX = innerWidth  / (canvas.width  || innerWidth);
+      const scaleY = innerHeight / (canvas.height || innerHeight);
+      canvas.width = innerWidth; canvas.height = innerHeight;
+      for (const p of ambient) { p.x *= scaleX; p.y *= scaleY; }
+    }
     resize();
     window.addEventListener('resize', resize);
 
@@ -289,11 +283,9 @@
     const trail = Array.from({ length: TRAIL }, () => ({ x: initX, y: initY, vx: 0, vy: 0 }));
     const ptr = { x: initX, y: initY };
     let ptrMoved = false;
-    const dotEl = document.getElementById('dot');
 
     document.addEventListener('pointermove', e => {
       ptr.x = e.clientX; ptr.y = e.clientY; ptrMoved = true;
-      dotEl.style.left = e.clientX + 'px'; dotEl.style.top = e.clientY + 'px';
     });
 
     let lastFrame = performance.now();
@@ -306,8 +298,8 @@
       ctx.clearRect(0, 0, W, H);
 
       const dark = html.dataset.theme !== 'light';
-      const pRgb = dark ? '210,215,232' : '40,40,40';
-      const sRgb = dark ? '218,222,240' : '20,20,20';
+      const pRgb = dark ? '238,240,248' : '40,40,40';
+      const sRgb = dark ? '242,244,252' : '20,20,20';
 
       for (const p of ambient) {
         p.x += p.vx * dt; p.y += p.vy * dt;
