@@ -37,8 +37,8 @@
       --nav-active-bg:   rgba(0,0,0,.1);
       --btn-hover-bg:    rgba(0,0,0,.1);
       --btn-hover-border:rgba(0,0,0,.25);
-      --sub-color:       rgba(0,0,0,.45);
-      --body-text:       rgba(0,0,0,.6);
+      --sub-color:       rgba(0,0,0,.65);
+      --body-text:       rgba(0,0,0,.75);
       --label-color:     rgba(0,0,0,.35);
       --divider:         rgba(0,0,0,.08);
       --tag-bg:          rgba(0,0,0,.05);
@@ -192,12 +192,17 @@
       <div class="about-section">
         <p class="section-label">Background</p>
         <p class="section-body">
-          Hey, I'm Fahad — a student who enjoys building things and figuring out how they work.
-          I'm drawn to software because it sits at the intersection of problem-solving and creativity.
-          Whether it's a web app, a mobile build, or something I haven't tried yet, I like
-          shipping things that actually do something useful.
+          Hey! My name's Fahad Anwar, and I'm from Sacramento, California. My parents are both
+          immigrants from Pakistan, making me a first-generation college student. I attended
+          Inderkum High School, where I led clubs like the South East Asian Student Association
+          (SEASA) and Friday Night Live (FNL), a club dedicated to bringing awareness to underage
+          substance use. Along with this, I played volleyball and wrestled, all while participating
+          in the International Baccalaureate Diploma Program.
           <br><br>
-          Replace this with your own words whenever you're ready.
+          On the academic side, I'm interested in embedded systems, machine learning, robotics,
+          and brain-computer interfaces — the overlap between electronics and the human body is
+          what I find most interesting. Outside of that, I enjoy reading, watching films,
+          following the NFL and UFC, wrestling, and playing video games.
         </p>
       </div>
 
@@ -207,10 +212,10 @@
         <p class="section-label">Education</p>
         <div class="edu-entry">
           <div>
-            <div class="edu-name">Your University Name</div>
-            <div class="edu-degree">B.S. Your Major &amp; Minor</div>
+            <div class="edu-name">University of California — San Diego</div>
+            <div class="edu-degree">B.S. Electrical Engineering &amp; B.S. Cognitive Science — Machine Learning</div>
           </div>
-          <div class="edu-year">Expected 20XX</div>
+          <div class="edu-year">Expected 2026</div>
         </div>
       </div>
 
@@ -219,15 +224,14 @@
       <div class="about-section">
         <p class="section-label">Technologies</p>
         <div class="tag-cloud">
-          <span class="tag">JavaScript</span>
-          <span class="tag">TypeScript</span>
+          <span class="tag">Java</span>
           <span class="tag">Python</span>
-          <span class="tag">React</span>
-          <span class="tag">Node.js</span>
-          <span class="tag">Flutter</span>
-          <span class="tag">SQL</span>
+          <span class="tag">C++</span>
+          <span class="tag">C#</span>
           <span class="tag">Git</span>
-          <span class="tag">Docker</span>
+          <span class="tag">Raspberry Pi</span>
+          <span class="tag">Arduino</span>
+          <span class="tag">STM32</span>
         </div>
       </div>
 
@@ -236,9 +240,15 @@
       <div class="about-section">
         <p class="section-label">Interests</p>
         <div class="tag-cloud">
-          <span class="tag">Software Engineering</span>
-          <span class="tag">Mobile Development</span>
-          <span class="tag">Open Source</span>
+          <span class="tag">Embedded Systems</span>
+          <span class="tag">Machine Learning</span>
+          <span class="tag">Robotics</span>
+          <span class="tag">Brain-Computer Interfaces</span>
+          <span class="tag">NFL &amp; UFC</span>
+          <span class="tag">Wrestling</span>
+          <span class="tag">Film</span>
+          <span class="tag">Reading</span>
+          <span class="tag">Gaming</span>
         </div>
       </div>
 
@@ -259,6 +269,8 @@
 
     const canvas = document.getElementById('canvas');
     const ctx    = canvas.getContext('2d');
+    const ambient = [];
+
     function resize() {
       const scaleX = innerWidth  / (canvas.width  || innerWidth);
       const scaleY = innerHeight / (canvas.height || innerHeight);
@@ -267,8 +279,6 @@
     }
     resize();
     window.addEventListener('resize', resize);
-
-    const ambient = [];
     for (let i = 0; i < 120; i++) {
       ambient.push({
         x: Math.random() * innerWidth,  y: Math.random() * innerHeight,
@@ -311,25 +321,25 @@
         ctx.fill();
       }
 
-      const head = trail[0];
-      const tx = ptrMoved ? ptr.x : initX + Math.sin(t * 0.8)  * W * 0.04;
-      const ty = ptrMoved ? ptr.y : initY + Math.cos(t * 1.05) * H * 0.03;
-      head.vx += (tx - head.x) * 0.04 * dt; head.vy += (ty - head.y) * 0.04 * dt;
-      head.vx *= 0.84; head.vy *= 0.84;
-      head.x += head.vx * dt; head.y += head.vy * dt;
+      if (ptrMoved) {
+        const head = trail[0];
+        head.vx += (ptr.x - head.x) * 0.04 * dt; head.vy += (ptr.y - head.y) * 0.04 * dt;
+        head.vx *= 0.84; head.vy *= 0.84;
+        head.x += head.vx * dt; head.y += head.vy * dt;
 
-      for (let i = 1; i < TRAIL; i++) {
-        const prev = trail[i - 1], seg = trail[i];
-        const f = (0.22 - i * 0.004) * dt;
-        seg.x += (prev.x - seg.x) * f; seg.y += (prev.y - seg.y) * f;
-      }
+        for (let i = 1; i < TRAIL; i++) {
+          const prev = trail[i - 1], seg = trail[i];
+          const f = (0.22 - i * 0.004) * dt;
+          seg.x += (prev.x - seg.x) * f; seg.y += (prev.y - seg.y) * f;
+        }
 
-      for (let i = TRAIL - 1; i >= 0; i--) {
-        const ratio = 1 - i / TRAIL;
-        ctx.beginPath();
-        ctx.arc(trail[i].x, trail[i].y, 1 + ratio * 6, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${sRgb},${0.03 + ratio * 0.28})`;
-        ctx.fill();
+        for (let i = TRAIL - 1; i >= 0; i--) {
+          const ratio = 1 - i / TRAIL;
+          ctx.beginPath();
+          ctx.arc(trail[i].x, trail[i].y, 1 + ratio * 6, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${sRgb},${0.03 + ratio * 0.28})`;
+          ctx.fill();
+        }
       }
 
       requestAnimationFrame(draw);

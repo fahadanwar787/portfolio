@@ -33,7 +33,7 @@
       --nav-active-bg:   rgba(0,0,0,.1);
       --btn-hover-bg:    rgba(0,0,0,.1);
       --btn-hover-border:rgba(0,0,0,.25);
-      --sub-color:       rgba(0,0,0,.45);
+      --sub-color:       rgba(0,0,0,.65);
       --card-bg:         rgba(0,0,0,.03);
       --card-border:     rgba(0,0,0,.08);
       --card-hover-bg:   rgba(0,0,0,.06);
@@ -197,32 +197,8 @@
     <div class="work-columns">
       <div class="col col-left">
         <div class="project-card">
-          <!-- Replace background-image with url('../images/photo.jpg') when ready -->
           <div class="card-img" style="height:340px;background-image:linear-gradient(160deg,#0d1b2a,#1b2a3b 40%,#0a2240)"></div>
-          <div class="card-label">Project Title</div>
-        </div>
-        <div class="project-card">
-          <div class="card-img" style="height:260px;background-image:linear-gradient(160deg,#1a0a2e,#2e1065 50%,#1a0a2e)"></div>
-          <div class="card-label">Project Title</div>
-        </div>
-        <div class="project-card">
-          <div class="card-img" style="height:300px;background-image:linear-gradient(160deg,#071a12,#0d3321 50%,#071a12)"></div>
-          <div class="card-label">Project Title</div>
-        </div>
-      </div>
-
-      <div class="col col-right">
-        <div class="project-card">
-          <div class="card-img" style="height:310px;background-image:linear-gradient(160deg,#1a1200,#3b2a00 50%,#1a1200)"></div>
-          <div class="card-label">Project Title</div>
-        </div>
-        <div class="project-card">
-          <div class="card-img" style="height:280px;background-image:linear-gradient(160deg,#0a1a1a,#0d3333 50%,#0a1a1a)"></div>
-          <div class="card-label">Project Title</div>
-        </div>
-        <div class="project-card">
-          <div class="card-img" style="height:320px;background-image:linear-gradient(160deg,#1a0a14,#3b0a28 50%,#1a0a14)"></div>
-          <div class="card-label">Project Title</div>
+          <div class="card-label">Coming Soon</div>
         </div>
       </div>
     </div>
@@ -242,6 +218,8 @@
 
     const canvas = document.getElementById('canvas');
     const ctx    = canvas.getContext('2d');
+    const ambient = [];
+
     function resize() {
       const scaleX = innerWidth  / (canvas.width  || innerWidth);
       const scaleY = innerHeight / (canvas.height || innerHeight);
@@ -250,8 +228,6 @@
     }
     resize();
     window.addEventListener('resize', resize);
-
-    const ambient = [];
     for (let i = 0; i < 120; i++) {
       ambient.push({
         x: Math.random() * innerWidth,  y: Math.random() * innerHeight,
@@ -294,25 +270,25 @@
         ctx.fill();
       }
 
-      const head = trail[0];
-      const tx = ptrMoved ? ptr.x : initX + Math.sin(t * 0.8)  * W * 0.04;
-      const ty = ptrMoved ? ptr.y : initY + Math.cos(t * 1.05) * H * 0.03;
-      head.vx += (tx - head.x) * 0.04 * dt; head.vy += (ty - head.y) * 0.04 * dt;
-      head.vx *= 0.84; head.vy *= 0.84;
-      head.x += head.vx * dt; head.y += head.vy * dt;
+      if (ptrMoved) {
+        const head = trail[0];
+        head.vx += (ptr.x - head.x) * 0.04 * dt; head.vy += (ptr.y - head.y) * 0.04 * dt;
+        head.vx *= 0.84; head.vy *= 0.84;
+        head.x += head.vx * dt; head.y += head.vy * dt;
 
-      for (let i = 1; i < TRAIL; i++) {
-        const prev = trail[i - 1], seg = trail[i];
-        const f = (0.22 - i * 0.004) * dt;
-        seg.x += (prev.x - seg.x) * f; seg.y += (prev.y - seg.y) * f;
-      }
+        for (let i = 1; i < TRAIL; i++) {
+          const prev = trail[i - 1], seg = trail[i];
+          const f = (0.22 - i * 0.004) * dt;
+          seg.x += (prev.x - seg.x) * f; seg.y += (prev.y - seg.y) * f;
+        }
 
-      for (let i = TRAIL - 1; i >= 0; i--) {
-        const ratio = 1 - i / TRAIL;
-        ctx.beginPath();
-        ctx.arc(trail[i].x, trail[i].y, 1 + ratio * 6, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${sRgb},${0.03 + ratio * 0.28})`;
-        ctx.fill();
+        for (let i = TRAIL - 1; i >= 0; i--) {
+          const ratio = 1 - i / TRAIL;
+          ctx.beginPath();
+          ctx.arc(trail[i].x, trail[i].y, 1 + ratio * 6, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${sRgb},${0.03 + ratio * 0.28})`;
+          ctx.fill();
+        }
       }
 
       requestAnimationFrame(draw);
